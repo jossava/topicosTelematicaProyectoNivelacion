@@ -10,44 +10,7 @@
   </head>
 
   <body>
-  	<header>
-      <nav class="be-red white large-padding">
-  			<ul class="no-list row center-xs middle-xs no-margin">
-  				<li class="no-margin" id="logo">
-            <% if user_signed_in? %>
-              <strong><%= current_user.email %></strong>
-            <% else %>
-              <strong>PICTOP</strong>
-            <% end %>
-  				</li>
-  				<li class="col-md">
-  					<%= link_to "Inicio", root_path %>
-  				</li>
-  				<li class="col-md">
-  					Diseño
-  				</li>
-  				<li class="col-md">
-  					Programación
-  				</li>
-  				<li class="col-md">
-  					Tecnología
-  				</li>
-          <li class="col-md">
-            <% if user_signed_in? %>
-            <%= link_to "Logout", destroy_user_session_path, method: :delete %>
-          <% else %>
-            <%= link_to "Login", new_user_session_path %>
-          <%end%>
-          </li>
-  			</ul>
-  		</nav>
-  	</header>
-    
-    <% if user_signed_in? %>
-      <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %>
-    <% else %>
-      <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %>
-    <% end %>
+    <%= render "partials/navigation"%>
 
     <% if notice %>
       <p class="alert alert-success"><%= notice %></p>

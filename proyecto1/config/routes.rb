@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
+  resources :articles do
+    resources :comments, only: [:create, :destroy, :update]
+  end
   devise_for :users
-  resources :articles
 =begin
   	get "/articles" index
   	post "/articles" create

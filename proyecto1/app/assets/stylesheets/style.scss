@@ -40,11 +40,14 @@ a,a:visited{
 .no-list{
 	list-style-type: none;
 }
-.field{
+.field,.top-space,.actions{
 	margin-top: 1em;
 }
-.top-space{
-	margin-top: 0.4em;	
+.top-space2{
+	margin-top: 1.5em;	
+}
+.text-left{
+	text-align: left;
 }
 .form-control{
 	border: none;

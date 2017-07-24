@@ -1,0 +1,35 @@
+<header>
+  <nav class="be-red white large-padding">
+  	<ul class="no-list row center-xs middle-xs no-margin">
+  		<li class="no-margin" id="logo">
+        <% if user_signed_in? %>
+          <strong><%= current_user.email %></strong>
+        <% else %>
+          <strong>PICTOP</strong>
+        <% end %>
+  		</li>
+  		<li class="col-md">
+  			<%= link_to "Inicio", root_path %>
+  		</li>
+      <li class="col-md">
+        <%= link_to "Artículos", articles_path %>
+      </li>
+      <% if user_signed_in? %>
+        <li class="col-md">
+          <%= link_to 'Editar perfil', edit_user_registration_path%>
+        </li>
+        <li class="col-md">
+          <%= link_to "Cerrar sesión", destroy_user_session_path, method: :delete %>
+        </li>
+      <% else %>
+        <li class="col-md">
+          <%= link_to "Iniciar sesión", new_user_session_path %>
+        </li>
+        <li class="col-md">
+          <%= link_to "Crear cuenta", new_user_registration_path %>
+        </li>  
+      <%end%>
+      </li>
+  	</ul>
+  </nav>
+</header>
