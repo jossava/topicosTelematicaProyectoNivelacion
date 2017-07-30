@@ -8,7 +8,13 @@
 	Visitas: <%= @article.visits_count %>
 </p>
 <div>
+	Este artículo es <%= @article.visibility %>
+</div>
+<div>
 	<%= @article.body %>
+</div>
+<div class="field">
+	<%= image_tag @article.image.url(:medium) %>
 </div>
 <div class="field">
 	<h3>Comentarios</h3>

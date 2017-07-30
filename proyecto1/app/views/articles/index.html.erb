@@ -1,6 +1,20 @@
 <% @articles.each do |article| %>
-	<h1><%= link_to article.title, article %></h1>
-	<div>
-		<%= article.body %> - <%= link_to "Eliminar", article, method: :delete, class: "red"%>
-	</div>
+	<%if !current_user.nil? and article.visibility == "compartido"%>
+		<h1><%= link_to article.title, article %></h1>
+		<div>
+			<%= article.body %> - <%= link_to "Eliminar", article, method: :delete, class: "red"%>
+		</div>
+	<%end%>
+	<%if article.visibility == "publico"%>
+		<h1><%= link_to article.title, article %></h1>
+		<div>
+			<%= article.body %> - <%= link_to "Eliminar", article, method: :delete, class: "red"%>
+		</div>
+	<%end%>
+	<%if article.visibility == "privado" && article.user==current_user%>
+		<h1><%= link_to article.title, article %></h1>
+		<div>
+			<%= article.body %> - <%= link_to "Eliminar", article, method: :delete, class: "red"%>
+		</div>
+	<%end%>
 <%end%>
