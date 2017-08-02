@@ -1,8 +1,12 @@
 <div class="center-article-info", style="background-image: url("fondo.jpg");">
 	<h1><%= @article.title %></h1>
-	<%unless @article.user.nil? %>
+	<%if !@article.user.nil? %>
 		<p>
 			Autor: <%= @article.user.email %>
+		</p>
+	<%else%>
+		<p>
+			Autor anónimo.
 		</p>
 	<%end%>
 	<p>

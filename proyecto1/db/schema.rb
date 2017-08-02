@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema.define(version: 20170730045148) do
 
-  create_table "articles", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "articles", id: :serial, force: :cascade do |t|
     t.string "title"
     t.text "body"
     t.integer "visits_count"
@@ -34,7 +37,7 @@ ActiveRecord::Schema.define(version: 20170730045148) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "comments", force: :cascade do |t|
+  create_table "comments", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "article_id"
     t.text "body"
@@ -44,7 +47,7 @@ ActiveRecord::Schema.define(version: 20170730045148) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :serial, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -63,4 +66,7 @@ ActiveRecord::Schema.define(version: 20170730045148) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "articles", "users"
+  add_foreign_key "comments", "articles"
+  add_foreign_key "comments", "users"
 end
