@@ -4,8 +4,13 @@ class ArticlesController < ApplicationController
 
 	#GET /articles
 	def index
-		# Todos los registros SELECT * FROM articles
-		@articles = Article.all
+		word = "%#{params[:keyword]}%"
+		if !word.nil? then 
+			@articles = Article.where("title LIKE ? OR body LIKE ?", word, word)
+		else
+			# Todos los registros SELECT * FROM articles
+			@articles = Article.all
+		end
 	end
 	
 	#GET /articles/:id

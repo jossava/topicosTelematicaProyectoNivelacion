@@ -1,3 +1,10 @@
+<%= form_tag "", method: :get, style:"text-align:right; width=300px;" do %>
+	<%= text_field_tag :keyword, nil, placeholder: "Qué artículo estás buscando", style:"width:300px;margin:15px;height:20px;"%>
+	<%= content_tag :button, type: :submit, class:"be-red white", style:"height:30px;" do%>
+		Buscar
+	<%end%>
+<%end%>
+
 <div>
 	<br>
 	<%= link_to "Crear nuevo articulo", new_article_url, class:"btn be-red white center-btn top-space" %>
@@ -17,7 +24,7 @@
 				<div class="absolute article-height background-image" style="background:rgba(0,0,0,0.5); top: 0px; left: 10%; width: 80%;">
 				</div>
 			</div>
-			<p> <%= article.body %></p>
+			<p> <%= article.body.truncate(50) %></p>
 			</div>
 		<%end%>
 		<%if article.visibility == "publico"%>
@@ -31,7 +38,7 @@
 				<div class="absolute article-height background-image" style="background:rgba(0,0,0,0.5); top: 0px; left: 10%; width: 80%;">
 				</div>
 			</div>
-			<p> <%= article.body %> </p>
+			<p> <%= article.body.truncate(50) %> </p>
 			</div>
 		<%end%>
 		<%if article.visibility == "privado" && article.user==current_user%>
@@ -45,7 +52,7 @@
 				<div class="absolute article-height background-image" style="background:rgba(0,0,0,0.5); top: 0px; left: 10%; width: 80%;">
 				</div>
 			</div>
-			<p> <%= article.body %></p>
+			<p> <%= article.body.truncate(50) %></p>
 			</div>
 		<%end%>
 	<%end%>

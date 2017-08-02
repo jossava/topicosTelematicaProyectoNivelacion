@@ -1,7 +1,14 @@
 html,body{
 	margin: 0px;
 	font-family: 'Open Sans', sans-serif;
-	background-image: url("images/fondo.jpg");
+	background-image: url("/images/fondo2.jpg");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-attachment: fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
 }
 .btn{
 	background-color: inherit;
@@ -58,9 +65,8 @@ a,a:visited{
 }
 .center-article-info{
 	position: absolute;
-	left: 50%;
-	top: 80%;
-	transform: translate(-50%, -50%);
+	left: 35%;
+	top: 100px;
 }
 .center-btn{
 	position: absolute;
