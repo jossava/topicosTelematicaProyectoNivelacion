@@ -1,33 +1,42 @@
-<h1><%= @article.title %></h1>
-<%unless @article.user.nil? %>
+<div class="center-article-info">
+	<h1><%= @article.title %></h1>
+	<%unless @article.user.nil? %>
+		<p>
+			Autor: <%= @article.user.email %>
+		</p>
+	<%end%>
 	<p>
-		Escrito por: <%= @article.user.email %>
+		Visitas: <%= @article.visits_count %>
 	</p>
-<%end%>
-<p>
-	Visitas: <%= @article.visits_count %>
-</p>
-<div>
-	Este artículo es <%= @article.visibility %>
+	<p>
+		Visibilidad: <%= @article.visibility %>
+	</p>
+	<p>
+		Fecha y hora de creación: <%= @article.created_at %>
+	</p>
+	<p>
+		Descripción: <%= @article.body %>
+	</p>
+	<div class="field">
+		<%= image_tag @article.image.url(:medium) %>
+	</div>
+	<!--div class="field">
+		<h3>Comentarios</h3>
+		<%= render "comments/form"%>
+		<ul id="comments-box">
+			<% @article.comments.each do |comment| %>
+				<li>
+				<%= comment.body %> - <%= comment.user.email %>
+				</li>
+			<%end%>
+		</ul>
+	</div-->
+	<br>
+	<br>
+	<div class="actions">
+		<strong><%= link_to "Editar", edit_article_path(@article), class:"btn be-red white" %></strong>
+		<strong><%= link_to "Eliminar", @article, method: :delete, class:"btn white", style:"background-color: #E74C3C; " %></strong>
+	</div>
+	<br>
+	<br>
 </div>
-<div>
-	<%= @article.body %>
-</div>
-<div class="field">
-	<%= image_tag @article.image.url(:medium) %>
-</div>
-<div class="field">
-	<h3>Comentarios</h3>
-	<%= render "comments/form"%>
-	<ul id="comments-box">
-		<% @article.comments.each do |comment| %>
-			<li>
-			<%= comment.body %> - <%= comment.user.email %>
-			</li>
-		<%end%>
-	</ul>
-</div>
-<div class="actions">
-	<strong><%= link_to "Editar", edit_article_path(@article)%></strong>
-</div>
-

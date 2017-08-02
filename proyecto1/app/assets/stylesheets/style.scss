@@ -1,6 +1,7 @@
 html,body{
 	margin: 0px;
 	font-family: 'Open Sans', sans-serif;
+	background-image: url("images/fondo.jpg");
 }
 .btn{
 	background-color: inherit;
@@ -25,6 +26,9 @@ a,a:visited{
 .be-red{
 	background-color: #2C3E50;
 }
+.btn-color{
+	background-color: #20579A;
+}
 .be-rederror{
 	background-color: rgb(255,80,80);
 }
@@ -32,7 +36,7 @@ a,a:visited{
 	color: rgb(255,80,80) !important;
 }
 .white{
-	color: #ECF0F1;
+	color: #ECF0F1 !important;
 }
 .large-padding{
 	padding: 8px 5px;
@@ -40,14 +44,44 @@ a,a:visited{
 .no-list{
 	list-style-type: none;
 }
+.text-center{
+	text-align: center;
+}
 .field,.top-space,.actions{
 	margin-top: 1em;
+}
+.bottom-space{
+	margin-bottom: 1em !important;
 }
 .top-space2{
 	margin-top: 1.5em;	
 }
+.center-article-info{
+	position: absolute;
+	left: 50%;
+	top: 80%;
+	transform: translate(-50%, -50%);
+}
+.center-btn{
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
 .text-left{
 	text-align: left;
+}
+.background-image{
+	background-position: center;
+	background-size: cover; 
+}
+.article-height{
+	height: 150px;
+}
+.relative{
+	position: relative;
+}
+.absolute{
+	position: absolute;
 }
 .form-control{
 	border: none;

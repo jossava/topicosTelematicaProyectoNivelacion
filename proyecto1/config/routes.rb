@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  resources :categories
+  #resources :categories
   resources :articles do
-    resources :comments, only: [:create, :destroy, :update]
+    resources :comments, only: [:create, :update]
   end
 
   devise_for :users

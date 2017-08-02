@@ -1,20 +1,52 @@
-<% @articles.each do |article| %>
-	<%if !current_user.nil? and article.visibility == "compartido"%>
-		<h1><%= link_to article.title, article %></h1>
-		<div>
-			<%= article.body %> - <%= link_to "Eliminar", article, method: :delete, class: "red"%>
-		</div>
+<div>
+	<br>
+	<%= link_to "Crear nuevo articulo", new_article_url, class:"btn be-red white center-btn top-space" %>
+	<br><br>
+</div>
+
+<div class="row">
+	<% @articles.each do |article| %>
+		<%if !current_user.nil? and article.visibility == "compartido"%>
+		<div class="col-md-4">
+			<div class="relative text-center">
+				<h2><%= link_to article.title, article %></h2>
+			</div>
+			<div class="box relative  article-height">
+				<div class="absolute article-height background-image" style="background:url(<%= article.image.url(:medium) %>); top: 0px; left: 10%; width: 80%;">
+				</div>
+				<div class="absolute article-height background-image" style="background:rgba(0,0,0,0.5); top: 0px; left: 10%; width: 80%;">
+				</div>
+			</div>
+			<p> <%= article.body %></p>
+			</div>
+		<%end%>
+		<%if article.visibility == "publico"%>
+		<div class="col-md-4">
+			<div class="relative text-center">
+				<h2><%= link_to article.title, article %></h2>
+			</div>
+			<div class="box relative article-height">
+				<div class="absolute article-height background-image" style="background:url(<%= article.image.url(:medium) %>); top: 0px; left: 10%; width: 80%;">
+				</div>
+				<div class="absolute article-height background-image" style="background:rgba(0,0,0,0.5); top: 0px; left: 10%; width: 80%;">
+				</div>
+			</div>
+			<p> <%= article.body %> </p>
+			</div>
+		<%end%>
+		<%if article.visibility == "privado" && article.user==current_user%>
+		<div class="col-md-4">	
+			<div class="relative text-center">
+				<h2><%= link_to article.title, article %></h2>
+			</div>
+			<div class="box relative  article-height">
+				<div class="absolute article-height background-image" style="background:url(<%= article.image.url(:medium) %>); top: 0px; left: 10%; width: 80%;">
+				</div>
+				<div class="absolute article-height background-image" style="background:rgba(0,0,0,0.5); top: 0px; left: 10%; width: 80%;">
+				</div>
+			</div>
+			<p> <%= article.body %></p>
+			</div>
+		<%end%>
 	<%end%>
-	<%if article.visibility == "publico"%>
-		<h1><%= link_to article.title, article %></h1>
-		<div>
-			<%= article.body %> - <%= link_to "Eliminar", article, method: :delete, class: "red"%>
-		</div>
-	<%end%>
-	<%if article.visibility == "privado" && article.user==current_user%>
-		<h1><%= link_to article.title, article %></h1>
-		<div>
-			<%= article.body %> - <%= link_to "Eliminar", article, method: :delete, class: "red"%>
-		</div>
-	<%end%>
-<%end%>
+</div>

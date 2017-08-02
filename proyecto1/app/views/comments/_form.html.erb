@@ -13,11 +13,10 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :body %>
-    <%= f.text_area :body %>
+    Ingrese un comentario: <%= f.text_area :body %>
   </div>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Comentar",class:"be-red white" %>
   </div>
 <% end %>
