@@ -37,10 +37,12 @@
 	</div-->
 	<br>
 	<br>
+	<% if !@article.user.nil? and @article.user == current_user %>
 	<div class="actions">
 		<strong><%= link_to "Editar", edit_article_path(@article), class:"btn be-red white" %></strong>
 		<strong><%= link_to "Eliminar", @article, method: :delete, class:"btn white", style:"background-color: #E74C3C; " %></strong>
 	</div>
+	<%end%>
 	<br>
 	<br>
 </div>
