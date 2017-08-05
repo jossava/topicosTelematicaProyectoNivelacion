@@ -55,3 +55,4 @@ gem 'devise'
 gem "jquery-turbolinks"
 
 gem "paperclip"
+gem "passenger", ">= 5.0.25"
