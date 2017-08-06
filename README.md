@@ -1,17 +1,17 @@
 # topicosTelematicaProyectoNivelacion
 ## 1. Creating the project1 Application
 
-        user1@dev$ rails new proyecto1
+        $ rails new proyecto1
 
 ## 2. Starting up the WebApp Server
 
-        user1@dev$ rails server
+        $ rails server
 
 * Open browser: http://localhost:3000
 
 ## 3. Main page: "Hello World"
 
-        user1@dev$ rails generate controller Welcome index
+        $ rails generate controller Welcome index
 
         edit:
         app/views/welcome/index.html.erb
@@ -36,7 +36,7 @@
 
 * output:
 
-      Prefix Verb   URI Pattern                                  Controller#Action
+                  Prefix Verb   URI Pattern                                  Controller#Action
                 articles GET    /articles(.:format)                          articles#index
                          POST   /articles(.:format)                          articles#create
              new_article GET    /articles/new(.:format)                      articles#new
@@ -64,7 +64,7 @@ cancel_user_registration GET    /users/cancel(.:format)                      dev
 
 ## 5. Generate controller for 'articles' REST Services
 
-        user1@dev$ rails generate controller Articles
+        $ rails generate controller Articles
 
 * modify: app/controllers/articles_controller.rb
 * create: app/views/articles/new.html.erb    
@@ -75,24 +75,70 @@ cancel_user_registration GET    /users/cancel(.:format)                      dev
 
 * edit: app/views/articles/new.html.erb:
 
-      <%= form_for :article do |f| %>
-      <p>
-        <%= f.label :title %><br>
-        <%= f.text_field :title %>
-      </p>
+      <% name ||= "Crear" %>
+        <h1><%= name %> artículo</h1>
+        <%= form_for(@article) do |f| %>
+                <% @article.errors.full_messages.each do |message| %>
+                        <div class="be-rederror white top-space"> 
+                                * <%= message %>
+                        </div>
+                <%end%>
+                <div class="field">
+                        <%= f.text_field :title, placeholder: "Título", class:"form-control" %>
+                </div>
+                <div class="field">
+                        Visibilidad - <%= f.select :visibility, options_for_select(["publico","privado","compartido"]) %>
+                </div>
+                <div class="field">
+                        <%= f.text_area :body, placeholder: "Escribe aquí el artículo", style: "height:250px;", class:"form-control" %>
+                </div>
+                <div class="field">
+                        Imagen: <%= f.file_field :image %>
+                </div>
+                <div class="field">
+                        <%= f.submit "Publicar", class:"btn be-red white" %>
+                </div>
+        <%end%>
 
-      <p>
-        <%= f.label :text %><br>
-        <%= f.text_area :text %>
-      </p>
-      <p>
-        <%= f.submit %>
-      </p>
-      <% end %>
+* modify: app/views/articles/show.html.erb:
 
-* modify: app/views/articles/new.html.erb:
-
-      <%= form_for :article, url: articles_path do |f| %>
+      <div class="center-article-info", style="background-image: url("fondo.jpg");">
+	<h1><%= @article.title %></h1>
+	<%if !@article.user.nil? %>
+		<p>
+			Autor: <%= @article.user.email %>
+		</p>
+	<%else%>
+		<p>
+			Autor anónimo.
+		</p>
+                <%end%>
+                <p>
+                        Visitas: <%= @article.visits_count %>
+                </p>
+                <p>
+                        Visibilidad: <%= @article.visibility %>
+                </p>
+                <p>
+                        Fecha y hora de creación: <%= @article.created_at %>
+                </p>
+                <p>
+                        Descripción: <%= @article.body %>
+                </p>
+                <div class="field">
+                        <%= image_tag @article.image.url(:medium) %>
+                </div>
+                <br>
+                <br>
+                <% if !@article.user.nil? and @article.user == current_user %>
+                <div class="actions">
+                        <strong><%= link_to "Editar", edit_article_path(@article), class:"btn be-red white" %></strong>
+                        <strong><%= link_to "Eliminar", @article, method: :delete, class:"btn white", style:"background-color: #E74C3C; " %></strong>
+                </div>
+                <%end%>
+                <br>
+                <br>
+        </div>
 
       POST method and require 'create' action.
 
@@ -103,32 +149,34 @@ cancel_user_registration GET    /users/cancel(.:format)                      dev
           end
 
           def create
-            render plain: params[:article].inspect
-          end
+		@article = current_user.articles.new(article_params)
+	   end
         end     
 
 ## 7. Creating the Article model
 
-      user1@dev$ rails generate model Article title:string text:text
+      $ rails g model Article title:string body:text visits_count:integer visibility:string
 
-* look db/migrate/YYYYMMDDHHMMSS_create_articles.rb:
+* look db/migrate/20170718222157_create_articles.rb:
 
       class CreateArticles < ActiveRecord::Migration[5.0]
-        def change
-          create_table :articles do |t|
-            t.string :title
-            t.text :text
+          def change
+            create_table :articles do |t|
+              t.string :title
+              t.text :body
+              t.integer :visits_count
+              t.string :visibility
 
-            t.timestamps
+              t.timestamps null: false
+            end
           end
         end
-      end
 
 ## 8. Running a Migration
 
 run:
 
-    user1@dev$ rails db:migrate
+    $ rake db:migrate
 
 ## include postgresql in test and production environment:
 
@@ -143,9 +191,9 @@ run:
 
       test:
           adapter: postgresql
-          database: articulosem_test
-          user: pguser
-          password: changeme
+          database: bd_test
+          user: jossava
+          password: jossava
           host: localhost
           port: 5432
           pool: 5
@@ -154,9 +202,9 @@ run:
 
       production:
           adapter: postgresql
-          database: articulosem
-          user: pguser
-          password: changeme
+          database: bd_production
+          user: jossava
+          password: jossava
           host: localhost
           port: 5432
           pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
@@ -164,7 +212,7 @@ run:
 
 * Drop, Create and migrate new database:
 
-          user1@dev$ rake db:drop db:create db:migrate
+          $ rake db:drop db:create db:migrate
 
 ## 9. Saving data in the controller
 
@@ -172,28 +220,22 @@ run:
 
       def create
         @article = Article.new(params[:article])
-
-        @article.save
-        redirect_to @article
+        if @article.save
+                redirect_to @article
+        else
+                render :new
+        end
       end
 
-* fix1:
+* fix:
 
-      @article = Article.new(params.require(:article).permit(:title, :text))
-
-* fix2:
-
-      def create
-        @article = Article.new(article_params)
-
-        @article.save
-        redirect_to @article
-      end
-
+      before_action :set_article, except: [:new, :create, :index]
+      
       private
-        def article_params
-          params.require(:article).permit(:title, :text)
-        end      
+      def article_params
+        params.require(:article).permit(:title, :body, :visibility, :image)
+      end
+  
 
 ## 10. Showing Articles
 
