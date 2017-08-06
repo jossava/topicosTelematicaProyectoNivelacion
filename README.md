@@ -520,53 +520,56 @@ run:
       	params.require(:article).permit(:title, :body, :visibility, :image)
       end
 
-* View: add link 'edit' in app/views/articles/index.html.erb
+* View: add link 'edit' in app/views/articles/show.html.erb
 
-      <table>
-        <tr>
-          <th>Title</th>
-          <th>Text</th>
-          <th colspan="2"></th>
-        </tr>
-
-        <% @articles.each do |article| %>
-          <tr>
-            <td><%= article.title %></td>
-            <td><%= article.text %></td>
-            <td><%= link_to 'Show', article_path(article) %></td>
-            <td><%= link_to 'Edit', edit_article_path(article) %></td>
-          </tr>
-        <% end %>
-      </table>
-
-* View: add link 'edit' in app/views/articles/show.html.erb:
-
-      ...
-      <%= link_to 'Edit', edit_article_path(@article) %> |
-      <%= link_to 'Back', articles_path %>
+	      ...
+		<% if !@article.user.nil? and @article.user == current_user %>
+		<div class="actions">
+			<strong><%= link_to "Editar", edit_article_path(@article), class:"btn be-red white" %></strong>
+			<strong><%= link_to "Eliminar", @article, method: :delete, class:"btn white", style:"background-color: #E74C3C; " %></strong>
+		</div>
+		<%end%>
+		...
 
 # 14. delete an Article
 
 Route:
 
-      DELETE /articles/:id(.:format)      articles#destroy  
+      DELETE /articles/:id(.:format)                      articles#destroy  
 
 Controller: app/controllers/articles_controller.rb
 
-      def destroy
-        @article = Article.find(params[:id])
-        @article.destroy
+        def destroy
+		#DELETE FROM articles
+		@article = Article.find(params[:id]) ya está en el callback set_article
+		@article.destroy # Eliminar objeto de la base de datos
+		redirect_to articles_path
+	end             
+	
+Fix: 
+	
+	before_action :set_article, except: [:new, :create, :index]
+	def destroy
+		#DELETE FROM articles
+		@article = Article.find(params[:id]) ya está en el callback set_article
+		@article.destroy # Eliminar objeto de la base de datos
+		redirect_to articles_path
+	end 
+	private
+	def article_params
+		params.require(:article).permit(:title, :body, :visibility, :image)
+	end
 
-        redirect_to articles_path
-      end                                      
+View: add 'delete' link to app/views/articles/show.html.erb
 
-View: add 'delete' link to app/views/articles/index.html.erb
-
-      ...
-      <td><%= link_to 'Edit', edit_article_path(article) %></td>
-      <td><%= link_to 'Delete', article_path(article), method: :delete,
-              data: { confirm: 'Are you sure?' } %></td>
-      ...
+      		...
+		<% if !@article.user.nil? and @article.user == current_user %>
+		<div class="actions">
+			<strong><%= link_to "Editar", edit_article_path(@article), class:"btn be-red white" %></strong>
+			<strong><%= link_to "Eliminar", @article, method: :delete, class:"btn white", style:"background-color: #E74C3C; " %></strong>
+		</div>
+		<%end%>
+		...
 
 ## DEPLOYMENT ON DCA FOR TESTING
 
@@ -579,45 +582,45 @@ View: add 'delete' link to app/views/articles/index.html.erb
       https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-ruby-on-rails-application-on-centos-7
 
 
-* Connect remote server: (user1 is a sudo user)
+* Connect remote server: (jossava is a sudo user)
 
-      local$ ssh user1@10.131.137.236
-      Password: *****
+      local$ ssh jossava@10.131.137.244
+      Password: ********
 
-      user1@test$
+      jossava@mydomain$
 
 * verify and install rvm, ruby, rails, postgres and nginx
 
 * install rvm (https://rvm.io/rvm/install)
 
-        user1@test$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+        user1@mydomain$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 
-        user1@test$ \curl -sSL https://get.rvm.io | bash
+        user1@mydomain$ \curl -sSL https://get.rvm.io | bash
 
 * reopen terminal app:
 
-        user1@test$ exit
+        jossava@mydomain$ exit
 
-        local$ ssh user1@10.131.137.236
-        Password: *****
+        local$ ssh jossava@10.131.137.244
+        Password: ********
 
 * install ruby 2.4.1
 
-        user1@test$ rvm list known
-        user1@test$ rvm install 2.4.1
+        jossava@mydomain$ rvm list known
+        jossava@mydomain$ rvm install 2.4.1
 
 * install rails
 
-        user1@test$ gem install rails
+        jossava@mydomain$ gem install rails
 
 ## install postgres:
 
-        user1@test$ sudo yum install -y postgresql-server postgresql-contrib postgresql-devel
-        Password: *****
+        jossava@mydomain$ sudo yum install -y postgresql-server postgresql-contrib postgresql-devel
+        Password: ********
 
-        user1@test$ sudo postgresql-setup initdb
+        jossava@mydomain$ sudo postgresql-setup initdb
 
-        user1@test$ sudo vi /var/lib/pgsql/data/pg_hba.conf
+        jossava@mydomain$ sudo vi /var/lib/pgsql/data/pg_hba.conf
 
         original:
 
@@ -631,12 +634,12 @@ View: add 'delete' link to app/views/articles/index.html.erb
 
 * run postgres:
 
-        user1@test$ sudo systemctl start postgresql
-        user1@test$ sudo systemctl enable postgresql
+        jossava@mydomain$ sudo systemctl start postgresql
+        jossava@mydomain$ sudo systemctl enable postgresql
 
 * Create Database User:
 
-        user1@test$ sudo su - postgres
+        user1@mydomain$ sudo su - postgres
 
         user1@test$ createuser -s pguser
 
@@ -661,33 +664,33 @@ View: add 'delete' link to app/views/articles/index.html.erb
 
 ## clone de git repo, install and run:
 
-        user1@test$ mkdir apps
-        user1@test$ cd apps
-        user1@test$ git clone https://github.com/st0263eafit/rubyArticulosEM.git
-        user1@test$ cd rubyArticulosEM
-        user1@test$ bundle install
-        user1@test$ rake db:drop db:create db:migrate
-        user1@test$ export RAILS_ENV=test
-        user1@test$ export PORT=4000
-        user1@test$ rails server
+        jossava@mydomain$ mkdir apps
+        jossava@mydomain$ cd apps
+        jossava@mydomain$ git clone https://github.com/st0263eafit/rubyArticulosEM.git
+        jossava@mydomain$ cd topicosTelematicaProyectoNivelacion
+        jossava@mydomain$ bundle install
+        jossava@mydomain$ rake db:drop db:create db:migrate
+        jossava@mydomain$ export RAILS_ENV=test
+        jossava@mydomain$ export PORT=4000
+        jossava@mydomain$ rails server
 
 # SETUP Centos 7.1 in production With Apache Web Server and Passenger.
 
 * Install Apache Web Server
 
-        user1@prod$ sudo yum install httpd
-        user1@prod$ sudo systemctl enable httpd
-        user1@prod$ sudo systemctl start httpd
+        jossava@mydomain$ sudo yum install httpd
+        jossava@mydomain$ sudo systemctl enable httpd
+        jossava@mydomain$ sudo systemctl start httpd
 
-        test in a browser: http://10.131.137.236
+        test in a browser: http://10.131.137.244
 
 * Install YARN (https://yarnpkg.com/en/docs/install) (for rake assets:precompile):  
 
 * Install module Passenger for Rails in HTTPD (https://www.phusionpassenger.com/library/install/apache/install/oss/el7/):
 
-        user1@prod$ gem install passenger
+        jossava@mydomain$ gem install passenger
 
-        user1@prod$ passenger-install-apache2-module
+        jossava@mydomain$ passenger-install-apache2-module
 
 when finish the install module, add to /etc/http/conf/httpd.conf:
 
@@ -701,63 +704,63 @@ when finish the install module, add to /etc/http/conf/httpd.conf:
 
 * summary:
 
-        - clone the repo to /var/www/myapp/rubyArticulosEM
+        - clone the repo to /var/www/myapp/topicosTelematicaProyectoNivelacion
 
-        user1@prod$ cd /var/www/myapp/rubyArticulosEM
+        jossava@mydomain$ cd /var/www/myapp/topicosTelematicaProyectoNivelacion
 
-        user1@prod$ bundle install --deployment --without development test
+        jossava@mydomain$ bundle install --deployment --without development test
 
         - Configure database.yml and secrets.yml:
 
-        user1@prod$ bundle exec rake secret
-        user1@prod$ vim config/secrets.yml
+        jossava@mydomain$ bundle exec rake secret
+        jossava@mydomain$ vim config/secrets.yml
 
         production:
           secret_key_base: the value that you copied from 'rake secret'
 
-        user1@prod$ bundle exec rake assets:precompile db:migrate RAILS_ENV=production
+        jossava@mydomain$ bundle exec rake assets:precompile db:migrate RAILS_ENV=production
 
-* add articles.conf to /etc/httpd/conf.d/myapp.conf:
+* add pictoparticles.conf to /etc/httpd/conf.d/pictoparticles.conf:
 
-        <VirtualHost *:80>
-            ServerName 10.131.137.236
+       <VirtualHost *:80>
+	    ServerName 10.131.137.244
 
-            # Tell Apache and Passenger where your app's 'public' directory is
-            DocumentRoot /var/www/myapp/rubyArticulosEM/public
+	    # Tell Apache and Passenger where your app's 'public' directory is                                                                                
+	    DocumentRoot /var/www/pictoparticles/code/proyecto1/public
 
-            PassengerRuby /home/user1/.rvm/gems/ruby-2.4.1/wrappers/ruby
+	    PassengerRuby /home/jossava/.rvm/gems/ruby-2.4.1/wrappers/ruby
 
-            # Relax Apache security settings
-            <Directory /var/www/myapp/rubyArticulosEM/public>
-                Allow from all
-                Options -MultiViews
-                # Uncomment this if you're on Apache >= 2.4:
-                #Require all granted
-            </Directory>
-        </VirtualHost>
+	    # Relax Apache security settings                                                                                                                  
+	    <Directory /var/www/pictoparticles/code/proyecto1/public>
+	      Allow from all
+	      Options -MultiViews
+	      # Uncomment this if you're on Apache >= 2.4:                                                                                                    
+	      #Require all granted                                                                                                                            
+	    </Directory>
+      </VirtualHost>
 
 * restart httpd
 
-        user1@prod$ sudo systemctl restart httpd
+        user1@mydomain$ sudo systemctl restart httpd
 
-        test: http://10.131.137.239
+        test: http://10.131.137.244
 
 # SETUP Centos 7.1 in production With NGINX with inverse proxy
 
 * Install nginx
 
-        user1@prod$ sudo yum install nginx
-        user1@prod$ sudo systemctl enable nginx
-        user1@prod$ sudo systemctl start nginx
+        jossava@mydomain$ sudo yum install nginx
+        jossava@mydomain$ sudo systemctl enable nginx
+        jossava@mydomain$ sudo systemctl start nginx
 
         test in a browser: http://10.131.137.236
 
 * Rails app is running on 3000 port
 
-        user1@prod$ cd rubyArticulosEM
-        user1@prod$ export RAILS_ENV=test
-        user1@prod$ export PORT=3000
-        user1@prod$ rails server
+        jossava@mydomain$ cd proyecto1
+        jossava@mydomain$ export RAILS_ENV=test
+        jossava@mydomain$ export PORT=3000
+        jossava@mydomain$ rails server
         => Booting Puma
         => Rails 5.1.2 application starting in test on http://0.0.0.0:3000
         => Run `rails server -h` for more startup options
@@ -772,11 +775,11 @@ when finish the install module, add to /etc/http/conf/httpd.conf:
 
 * Configure /etc/nginx/nginx.conf for Inverse Proxy
 
-      App from browser: http://10.131.137.236/rubyArticulos
+      App from browser: http://10.131.137.244/pictoparticles
 
       // /etc/nginx/nginx.conf
 
-      location /rubyArticulos/ {
+      location /pictoparticles/ {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header HOST $http_host;
         proxy_set_header X-NginX-Proxy true;
@@ -789,27 +792,43 @@ when finish the install module, add to /etc/http/conf/httpd.conf:
       // modify config/routes.rb
       # scope '/' -> run http://server:3000 (native) or http://server (inverse proxy or passenger)
       # scope '/prefix_url' -> run http://server:3000/prefix_url or http://server/prefix_url (inverse proxy or passenger).
-      # ej: http://10.131.137.236/rubyArticulos
+      # ej: http://10.131.137.244//pictoparticles
       Rails.application.routes.draw do
-        scope '/rubyArticulos' do
-          get 'welcome/index'
-          resources :articles
-          root 'welcome#index'
+      	scope '/pictoparticles' do
+	  resources :articles do
+	    #resources :comments, only: [:create, :update]
+	  end
+	  devise_for :users
+	  root 'welcome#index'
         end
-      end
-
+      end  
+      
 * Show new routes and controllers:
 
-      user1@prod$ rails routes
+      jossava@mydomain$ rails routes
 
-            Prefix    Verb   URI Pattern                                Controller#Action
-            welcome_index GET    /rubyArticulos/welcome/index(.:format)     welcome#index
-                 articles GET    /rubyArticulos/articles(.:format)          articles#index
-                          POST   /rubyArticulos/articles(.:format)          articles#create
-              new_article GET    /rubyArticulos/articles/new(.:format)      articles#new
-             edit_article GET    /rubyArticulos/articles/:id/edit(.:format) articles#edit
-                  article GET    /rubyArticulos/articles/:id(.:format)      articles#show
-                          PATCH  /rubyArticulos/articles/:id(.:format)      articles#update
-                          PUT    /rubyArticulos/articles/:id(.:format)      articles#update
-                          DELETE /rubyArticulos/articles/:id(.:format)      articles#destroy
-                    root  GET    /rubyArticulos(.:format)                   welcome#index
+            Prefix Verb          URI Pattern                                  		    Controller#Action
+                articles GET    /pictoparticles/articles(.:format)                          articles#index
+                         POST   /pictoparticles/articles(.:format)                          articles#create
+             new_article GET    /pictoparticles/articles/new(.:format)                      articles#new
+            edit_article GET    /pictoparticles/articles/:id/edit(.:format)                 articles#edit
+                 article GET    /pictoparticles/articles/:id(.:format)                      articles#show
+                         PATCH  /pictoparticles/articles/:id(.:format)                      articles#update
+                         PUT    /pictoparticles/articles/:id(.:format)                      articles#update
+                         DELETE /pictoparticles/articles/:id(.:format)                      articles#destroy
+        new_user_session GET    /pictoparticles/users/sign_in(.:format)                     devise/sessions#new
+            user_session POST   /pictoparticles/users/sign_in(.:format)                     devise/sessions#create
+    	destroy_user_session DELETE /pictoparticles/users/sign_out(.:format)                devise/sessions#destroy
+       new_user_password GET    /pictoparticles/users/password/new(.:format)                devise/passwords#new
+      edit_user_password GET    /pictoparticles/users/password/edit(.:format)               devise/passwords#edit
+           user_password PATCH  /pictoparticles/users/password(.:format)                    devise/passwords#update
+                         PUT    /pictoparticles/users/password(.:format)                    devise/passwords#update
+                         POST   /pictoparticles/users/password(.:format)                    devise/passwords#create
+		cancel_user_registration GET    /pictoparticles/users/cancel(.:format)      devise/registrations#cancel
+   	new_user_registration GET    /pictoparticles/users/sign_up(.:format)                devise/registrations#new
+  	edit_user_registration GET    /pictoparticles/users/edit(.:format)                  devise/registrations#edit
+       	user_registration PATCH  /pictoparticles/users(.:format)                            devise/registrations#update
+                         PUT    /pictoparticles/users(.:format)                             devise/registrations#update
+                         DELETE /pictoparticles/users(.:format)                             devise/registrations#destroy
+                         POST   /pictoparticles/users(.:format)                             devise/registrations#create
+                    root GET    /pictoparticles/                                            welcome#index
