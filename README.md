@@ -1,4 +1,10 @@
 # topicosTelematicaProyectoNivelacion
+
+# rubyArticulosEM
+## By: Juan Fernando Ossa Vásquez - jossava@eafit.edu.co
+
+# DEVELOPMENT::
+
 ## 1. Creating the project1 Application
 
         $ rails new proyecto1
@@ -251,15 +257,31 @@ run:
 
 * View: create a new file app/views/articles/show.html.erb
 
-      <p>
-        <strong>Title:</strong>
-        <%= @article.title %>
-      </p>
-
-      <p>
-        <strong>Text:</strong>
-        <%= @article.text %>
-      </p>    
+      		<h1><%= @article.title %></h1>
+		<%if !@article.user.nil? %>
+			<p>
+				Autor: <%= @article.user.email %>
+			</p>
+		<%else%>
+			<p>
+				Autor anónimo.
+			</p>
+		<%end%>
+		<p>
+			Visitas: <%= @article.visits_count %>
+		</p>
+		<p>
+			Visibilidad: <%= @article.visibility %>
+		</p>
+		<p>
+			Fecha y hora de creación: <%= @article.created_at %>
+		</p>
+		<p>
+			Descripción: <%= @article.body %>
+		</p>
+		<div class="field">
+			<%= image_tag @article.image.url(:medium) %>
+		</div>  
 
 # 11. Listing all articles
 
@@ -351,46 +373,83 @@ run:
 
 * View: Open app/views/welcome/index.html.erb
 
-      <h1>Hello World EAFIT</h1>
-      <%= link_to 'My Articles', controller: 'articles' %>  
+		<%if user_signed_in? %>
+			<h1> Bienvenido <%= current_user.email %></h1>
+		<%else%>
+			<h1>¡ Bienvenido al blog !</h1>
+		<%end%>
+		<a class="center-xs"><img src="http://1.bp.blogspot.com/-Fz7Sy-0x2u8/U6oZ8KHwPXI/AAAAAAAAAHU/eViNfw0-92Y/s1600/New+Moon+Collage.png"/></a>
 
 * View: app/views/articles/index.html.erb
 
-      <%= link_to 'New article', new_article_path %>    
+		<%= link_to "Crear nuevo articulo", new_article_url, class:"btn be-red white center-btn top-space" %>
+		<%= link_to article.title, article %>  
 
 * View: app/views/articles/new.html.erb
 
 
-      <%= form_for :article, url: articles_path do |f| %>
+      <%= form_for(@article) do |f| %>
         ...
       <% end %>
 
-      <%= link_to 'Back', articles_path %>
+      <%= f.submit "Publicar", class:"btn be-red white" %>
 
 * View: app/views/articles/show.html.erb
 
-      <p>
-        <strong>Title:</strong>
-        <%= @article.title %>
-      </p>
+		     <div class="center-article-info", style="background-image: url("fondo.jpg");">
+			<h1><%= @article.title %></h1>
+			<%if !@article.user.nil? %>
+				<p>
+					Autor: <%= @article.user.email %>
+				</p>
+			<%else%>
+				<p>
+					Autor anónimo.
+				</p>
+			<%end%>
+			<p>
+				Visitas: <%= @article.visits_count %>
+			</p>
+			<p>
+				Visibilidad: <%= @article.visibility %>
+			</p>
+			<p>
+				Fecha y hora de creación: <%= @article.created_at %>
+			</p>
+			<p>
+				Descripción: <%= @article.body %>
+			</p>
+			<div class="field">
+				<%= image_tag @article.image.url(:medium) %>
+			</div>
+			<br>
+			<br>
+			<% if !@article.user.nil? and @article.user == current_user %>
+			<div class="actions">
+				<strong><%= link_to "Editar", edit_article_path(@article), class:"btn be-red white" %></strong>
+				<strong><%= link_to "Eliminar", @article, method: :delete, class:"btn white", style:"background-color: #E74C3C; " %></strong>
+			</div>
+			<%end%>
+			<br>
+			<br>
+		</div>
 
-      <p>
-        <strong>Text:</strong>
-        <%= @article.text %>
-      </p>
-
-      <%= link_to 'Back', articles_path %>   
 
 # 13. Updating Articles     
 
 * Route:     
 
-      article GET    /articles/:id(.:format)      articles#show
+      PUT    /articles/:id(.:format)                      articles#update
 
 * Controller: edit action to the ArticlesController ->  app/controllers/articles_controller.rb
-
+	
+      before_action :set_article, except: [:new, :create, :index]
       def edit
-      @article = Article.find(params[:id])
+      end
+      
+      private
+      def article_params
+      	params.require(:article).permit(:title, :body, :visibility, :image)
       end
 
 * View: new page: app/views/articles/edit.html.erb
@@ -433,14 +492,32 @@ run:
 
 * Controller: update action in app/controllers/articles_controller.rb
 
-      def update
-        @article = Article.find(params[:id])
+	      def update
+			#UPDATE
+			@article.update_attributes({title: "Nuevo título"})
+			@article = Article.find(params[:id]) ya está en el callback set_article
+			if @article.update(article_params)
+				redirect_to @article
+			else
+				render :edit
+			end
+	      end
 
-        if @article.update(article_params)
-          redirect_to @article
-        else
-          render 'edit'
-        end
+	     
+* Fix: 
+	
+      before_action :set_article, except: [:new, :create, :index]
+      def update
+		if @article.update(article_params)
+			redirect_to @article
+		else
+			render :edit
+		end
+      end
+      
+      private
+      def article_params
+      	params.require(:article).permit(:title, :body, :visibility, :image)
       end
 
 * View: add link 'edit' in app/views/articles/index.html.erb
