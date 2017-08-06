@@ -103,42 +103,42 @@
 * modify: app/views/articles/show.html.erb:
 
       <div class="center-article-info", style="background-image: url("fondo.jpg");">
-	<h1><%= @article.title %></h1>
-	<%if !@article.user.nil? %>
-		<p>
-			Autor: <%= @article.user.email %>
-		</p>
-	<%else%>
-		<p>
-			Autor anónimo.
-		</p>
-                <%end%>
-                <p>
-                        Visitas: <%= @article.visits_count %>
-                </p>
-                <p>
-                        Visibilidad: <%= @article.visibility %>
-                </p>
-                <p>
-                        Fecha y hora de creación: <%= @article.created_at %>
-                </p>
-                <p>
-                        Descripción: <%= @article.body %>
-                </p>
-                <div class="field">
-                        <%= image_tag @article.image.url(:medium) %>
-                </div>
-                <br>
-                <br>
-                <% if !@article.user.nil? and @article.user == current_user %>
-                <div class="actions">
-                        <strong><%= link_to "Editar", edit_article_path(@article), class:"btn be-red white" %></strong>
-                        <strong><%= link_to "Eliminar", @article, method: :delete, class:"btn white", style:"background-color: #E74C3C; " %></strong>
-                </div>
-                <%end%>
-                <br>
-                <br>
-        </div>
+		<h1><%= @article.title %></h1>
+		<%if !@article.user.nil? %>
+			<p>
+				Autor: <%= @article.user.email %>
+			</p>
+		<%else%>
+			<p>
+				Autor anónimo.
+			</p>
+			<%end%>
+			<p>
+				Visitas: <%= @article.visits_count %>
+			</p>
+			<p>
+				Visibilidad: <%= @article.visibility %>
+			</p>
+			<p>
+				Fecha y hora de creación: <%= @article.created_at %>
+			</p>
+			<p>
+				Descripción: <%= @article.body %>
+			</p>
+			<div class="field">
+				<%= image_tag @article.image.url(:medium) %>
+			</div>
+			<br>
+			<br>
+			<% if !@article.user.nil? and @article.user == current_user %>
+			<div class="actions">
+				<strong><%= link_to "Editar", edit_article_path(@article), class:"btn be-red white" %></strong>
+				<strong><%= link_to "Eliminar", @article, method: :delete, class:"btn white", style:"background-color: #E74C3C; " %></strong>
+			</div>
+			<%end%>
+			<br>
+			<br>
+		</div>
 
       POST method and require 'create' action.
 
@@ -272,26 +272,80 @@ run:
       def index
          @articles = Article.all
       end
+      
+* Fix at app/controllers/articles_controller.rb to search articles
+
+		def index
+			word = "%#{params[:keyword]}%"
+			if !word.nil? then 
+				@articles = Article.where("title LIKE ? OR body LIKE ?", word, word)
+			else
+				# Todos los registros SELECT * FROM articles
+				@articles = Article.all
+			end
+		end
 
 * View: create a new file app/views/articles/index.html.erb
 
-      <h1>Listing articles</h1>
+	      <%= form_tag "", method: :get, style:"text-align:right; width=300px;" do %>
+			<%= text_field_tag :keyword, nil, placeholder: "Qué artículo estás buscando", style:"width:300px;margin:15px;height:20px;"%>
+			<%= content_tag :button, type: :submit, class:"be-red white", style:"height:30px;" do%>
+				Buscar
+			<%end%>
+		<%end%>
 
-      <table>
-        <tr>
-          <th>Title</th>
-          <th>Text</th>
-          <th></th>
-        </tr>
+		<div>
+			<br>
+			<%= link_to "Crear nuevo articulo", new_article_url, class:"btn be-red white center-btn top-space" %>
+			<br><br>
+		</div>
 
-        <% @articles.each do |article| %>
-          <tr>
-            <td><%= article.title %></td>
-            <td><%= article.text %></td>
-            <td><%= link_to 'Show', article_path(article) %></td>
-          </tr>
-        <% end %>
-      </table>
+		<div class="row">
+			<% @articles.each do |article| %>
+				<%if !current_user.nil? and article.visibility == "compartido"%>
+				<div class="col-md-4">
+					<div class="relative text-center">
+						<h2><%= link_to article.title, article %></h2>
+					</div>
+					<div class="box relative  article-height">
+						<div class="absolute article-height background-image" style="background:url(<%= article.image.url(:medium) %>); top: 0px; left: 10%; width: 80%;">
+						</div>
+						<div class="absolute article-height background-image" style="background:rgba(0,0,0,0.5); top: 0px; left: 10%; width: 80%;">
+						</div>
+					</div>
+					<p> <%= article.body.truncate(50) %></p>
+					</div>
+				<%end%>
+				<%if article.visibility == "publico"%>
+				<div class="col-md-4">
+					<div class="relative text-center">
+						<h2><%= link_to article.title, article %></h2>
+					</div>
+					<div class="box relative article-height">
+						<div class="absolute article-height background-image" style="background:url(<%= article.image.url(:medium) %>); top: 0px; left: 10%; width: 80%;">
+						</div>
+						<div class="absolute article-height background-image" style="background:rgba(0,0,0,0.5); top: 0px; left: 10%; width: 80%;">
+						</div>
+					</div>
+					<p> <%= article.body.truncate(50) %> </p>
+					</div>
+				<%end%>
+				<%if article.visibility == "privado" && article.user==current_user%>
+				<div class="col-md-4">	
+					<div class="relative text-center">
+						<h2><%= link_to article.title, article %></h2>
+					</div>
+					<div class="box relative  article-height">
+						<div class="absolute article-height background-image" style="background:url(<%= article.image.url(:medium) %>); top: 0px; left: 10%; width: 80%;">
+						</div>
+						<div class="absolute article-height background-image" style="background:rgba(0,0,0,0.5); top: 0px; left: 10%; width: 80%;">
+						</div>
+					</div>
+					<p> <%= article.body.truncate(50) %></p>
+					</div>
+				<%end%>
+			<%end%>
+		</div>
 
 # 12. Adding links
 
