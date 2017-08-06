@@ -1,7 +1,7 @@
 # topicosTelematicaProyectoNivelacion
-## 1. Creating the Article Application
+## 1. Creating the project1 Application
 
-        user1@dev$ rails new rubyArticulosEM
+        user1@dev$ rails new proyecto1
 
 ## 2. Starting up the WebApp Server
 
@@ -22,31 +22,45 @@
 * edit: config/routes.rb
       # scope '/' -> run http://server:3000 (native) or http://server (inverse proxy or passenger)
       # scope '/prefix_url' -> run http://server:3000/prefix_url or http://server/prefix_url (inverse proxy or passenger).
-      # ej: http://10.131.137.236/rubyArticulos
+      # ej: http://10.131.137.236/articles/
         Rails.application.routes.draw do
-          scope '/' do
-            get 'welcome/index'
-            resources :articles
-            root 'welcome#index'
+          resources :articles do
+            #resources :comments, only: [:create, :update]
           end
-        end
+          devise_for :users
+          root 'welcome#index'
+        end     
 
 * run:    
-        user1@dev$ rails routes
+        $ rake routes
 
 * output:
 
-      Prefix Verb   URI Pattern                  Controller#Action
-      welcome_index GET    /welcome/index(.:format)     welcome#index
-          articles  GET    /articles(.:format)          articles#index
-                    POST   /articles(.:format)          articles#create
-      new_article   GET    /articles/new(.:format)      articles#new
-      edit_article  GET    /articles/:id/edit(.:format) articles#edit
-        article     GET    /articles/:id(.:format)      articles#show
-                    PATCH  /articles/:id(.:format)      articles#update
-                    PUT    /articles/:id(.:format)      articles#update
-                    DELETE /articles/:id(.:format)      articles#destroy
-              root  GET    /                            welcome#index
+      Prefix Verb   URI Pattern                                  Controller#Action
+                articles GET    /articles(.:format)                          articles#index
+                         POST   /articles(.:format)                          articles#create
+             new_article GET    /articles/new(.:format)                      articles#new
+            edit_article GET    /articles/:id/edit(.:format)                 articles#edit
+                 article GET    /articles/:id(.:format)                      articles#show
+                         PATCH  /articles/:id(.:format)                      articles#update
+                         PUT    /articles/:id(.:format)                      articles#update
+                         DELETE /articles/:id(.:format)                      articles#destroy
+        new_user_session GET    /users/sign_in(.:format)                     devise/sessions#new
+            user_session POST   /users/sign_in(.:format)                     devise/sessions#create
+    destroy_user_session DELETE /users/sign_out(.:format)                    devise/sessions#destroy
+       new_user_password GET    /users/password/new(.:format)                devise/passwords#new
+      edit_user_password GET    /users/password/edit(.:format)               devise/passwords#edit
+           user_password PATCH  /users/password(.:format)                    devise/passwords#update
+                         PUT    /users/password(.:format)                    devise/passwords#update
+                         POST   /users/password(.:format)                    devise/passwords#create
+cancel_user_registration GET    /users/cancel(.:format)                      devise/registrations#cancel
+   new_user_registration GET    /users/sign_up(.:format)                     devise/registrations#new
+  edit_user_registration GET    /users/edit(.:format)                        devise/registrations#edit
+       user_registration PATCH  /users(.:format)                             devise/registrations#update
+                         PUT    /users(.:format)                             devise/registrations#update
+                         DELETE /users(.:format)                             devise/registrations#destroy
+                         POST   /users(.:format)                             devise/registrations#create
+                    root GET    /                                            welcome#index
 
 ## 5. Generate controller for 'articles' REST Services
 
