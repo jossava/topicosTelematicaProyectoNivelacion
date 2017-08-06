@@ -824,11 +824,4 @@ when finish the install module, add to /etc/http/conf/httpd.conf:
            user_password PATCH  /pictoparticles/users/password(.:format)                    devise/passwords#update
                          PUT    /pictoparticles/users/password(.:format)                    devise/passwords#update
                          POST   /pictoparticles/users/password(.:format)                    devise/passwords#create
-      			cancel_user_registration GET /pictoparticles/users/cancel(.:format) devise/registrations#cancel
-   	new_user_registration GET    /pictoparticles/users/sign_up(.:format)                devise/registrations#new
-  	edit_user_registration GET    /pictoparticles/users/edit(.:format)                  devise/registrations#edit
-       	user_registration PATCH  /pictoparticles/users(.:format)                            devise/registrations#update
-                         PUT    /pictoparticles/users(.:format)                             devise/registrations#update
-                         DELETE /pictoparticles/users(.:format)                             devise/registrations#destroy
-                         POST   /pictoparticles/users(.:format)                             devise/registrations#create
-                    root GET    /pictoparticles/                                            welcome#index
+			 ...
