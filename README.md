@@ -807,7 +807,7 @@ when finish the install module, add to /etc/http/conf/httpd.conf:
 
       jossava@mydomain$ rails routes
 
-            Prefix Verb          URI Pattern                                  		    Controller#Action
+            Prefix Verb          URI Pattern                                  	Controller#Action
                 articles GET    /pictoparticles/articles(.:format)                          articles#index
                          POST   /pictoparticles/articles(.:format)                          articles#create
              new_article GET    /pictoparticles/articles/new(.:format)                      articles#new
