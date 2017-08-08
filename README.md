@@ -795,9 +795,7 @@ when finish the install module, add to /etc/http/conf/httpd.conf:
       # ej: http://10.131.137.244//pictoparticles
       Rails.application.routes.draw do
       	scope '/pictoparticles' do
-	  resources :articles do
-	    #resources :comments, only: [:create, :update]
-	  end
+	  resources :articles
 	  devise_for :users
 	  root 'welcome#index'
         end
