@@ -1,17 +1,13 @@
 ## Definición del equipo, proyecto y aplicación
 
-a. Miembros del equipo y asignación de QA a miembros del equipo 
+# a. Miembros del equipo y asignación de QA a miembros del equipo 
 
-Miembro
-Atributo de calidad
-Daniel Rendón Montaño
-Disponibilidad
-Laura Mejia Vasquez
-Disponibilidad
-Dillan Alexis Muñeton Avendaño
-Rendimiento
-Juan Fernando Ossa Vasquez
-Seguridad
+| Miembro | Atributo de calidad |
+| --- | --- |
+| Daniel Rendón Montaño | Disponibilidad |
+| Laura Mejia Vasquez | Disponibilidad |
+| Dillan Alexis Muñeton Avendaño | Rendimiento |
+| Juan Fernando Ossa Vasquez | Seguridad |
 
 b. Selección de la aplicación basada en Proyecto1
 
