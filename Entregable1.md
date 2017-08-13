@@ -27,7 +27,7 @@ Igualmente, se podrá pagar por publicidad de promociones especiales.
 
 ## d. Requisitos Funcionales
 
-RF1: Debe permitir la creación, actualización y eliminación de las cuentas de usuarios.
+*RF1:* Debe permitir la creación, actualización y eliminación de las cuentas de usuarios.
 
 RF2: Debe permitir subir y eliminar productos(archivos de video)
 
