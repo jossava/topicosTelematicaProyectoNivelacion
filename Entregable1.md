@@ -25,7 +25,7 @@ Las ventas NO se realizarán por medio de la aplicación. Ésta sólo conecta co
 Las fuentes de ingreso de la página no estarán basadas en la venta o la publicación de los productos, sino que será opcional para los vendedores, pagar por el privilegio de ser los primeros resultados cuando los usuarios busquen ciertos productos. 
 Igualmente, se podrá pagar por publicidad de promociones especiales.
 
-d. Requisitos Funcionales
+## d. Requisitos Funcionales
 
 RF1: Debe permitir la creación, actualización y eliminación de las cuentas de usuarios.
 
@@ -46,32 +46,21 @@ RF8: Debe permitir la creación de usuarios mediante el uso de Facebook o Google
 RF9: Debe permitir la interacción entre usuarios, permitiendo “regatear” o sea ofrecer dinero u otros productos como medio de pago por diferentes tipos de artículos.
 
 
-Detalles técnicos del proceso para la incorporación de la Gestión de Contenidos en el proyecto 2.
+## Detalles técnicos del proceso para la incorporación de la Gestión de Contenidos en el proyecto 2.
 
 La aplicación correrá sobre un DCA de 2gb de RAM, 20gb de Disco duro y dos procesadores virtuales, además esta máquina virtual tendrá el sistema operativo CentOS 7.1
 	
-SISTEMA OPERATIVO
-LINUX CENTOS 7.1
-DIRECCIÓN IP SERVIDOR
-10.131.137.244
-LENGUAJE DE PROGRAMACIÓN
-JavaScript / NodeJS
-FRAMEWORK WEB - BACKEND
-Express
-FRAMEWORK WEB - FRONTEND (si aplica)
-Templates de HTML
-WEB APP SERVER
-Embebido (Node)
-WEB SERVER 
-NGINX
-BASE DE DATOS
-MongoDB
-GIT (CLI Y GUI) 
-GitHub
-PRUEBAS
-Postman
-OTROS QUE CONSIDERE
-Ninguno
+| SISTEMA OPERATIVO | LINUX CENTOS 7.1 |
+| DIRECCIÓN IP SERVIDOR | 10.131.137.244 |
+| LENGUAJE DE PROGRAMACIÓN | JavaScript / NodeJS |
+| FRAMEWORK WEB - BACKEND | Express |
+| FRAMEWORK WEB - FRONTEND (si aplica) | Templates de HTML |
+| WEB APP SERVER | Embebido (Node) |
+| WEB SERVER  | NGINX |
+| BASE DE DATOS | MongoDB |
+| GIT (CLI Y GUI) | GitHub | 
+| PRUEBAS | Postman |
+| OTROS QUE CONSIDERE | Ninguno |
 
 Aplicación completa desplegada en el Data Center Académico. PARA  PROYECTO 2, no es requerido desplegarla en Nube PaaS.
 	Esperando por servidor asignado por Edwin
