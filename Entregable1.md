@@ -27,23 +27,23 @@ Igualmente, se podrá pagar por publicidad de promociones especiales.
 
 ## d. Requisitos Funcionales
 
-*RF1:* Debe permitir la creación, actualización y eliminación de las cuentas de usuarios.
+* **RF1:** Debe permitir la creación, actualización y eliminación de las cuentas de usuarios.
 
-RF2: Debe permitir subir y eliminar productos(archivos de video)
+* **RF2:** Debe permitir subir y eliminar productos(archivos de video)
 
-RF3: Debe permitir elegir el estado del contenido entre público y privado
+* **RF3:** Debe permitir elegir el estado del contenido entre público y privado
 
-RF4: Debe permitir cambiar el estado del contenido (público a privado, y viceversa)
+* **RF4:** Debe permitir cambiar el estado del contenido (público a privado, y viceversa)
 
-RF5: Debe permitir la filtración de contenido (búsqueda por categoría)
+* **RF5:** Debe permitir la filtración de contenido (búsqueda por categoría)
 
-RF6: Debe permitir la navegación por todos los contenidos públicos subidos por todos los usuarios registrados.
+* **RF6:** Debe permitir la navegación por todos los contenidos públicos subidos por todos los usuarios registrados.
 
-RF7: Debe permitir la visualización del contenido privado por parte del autor del mismo.
+* **RF7:** Debe permitir la visualización del contenido privado por parte del autor del mismo.
 
-RF8: Debe permitir la creación de usuarios mediante el uso de Facebook o Google.
+* **RF8:** Debe permitir la creación de usuarios mediante el uso de Facebook o Google.
 
-RF9: Debe permitir la interacción entre usuarios, permitiendo “regatear” o sea ofrecer dinero u otros productos como medio de pago por diferentes tipos de artículos.
+* **RF9:** Debe permitir la interacción entre usuarios, permitiendo “regatear” o sea ofrecer dinero u otros productos como medio de pago por diferentes tipos de artículos.
 
 
 ## Detalles técnicos del proceso para la incorporación de la Gestión de Contenidos en el proyecto 2.
